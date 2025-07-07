@@ -11,10 +11,13 @@ import { HTTPSTATUS } from "./config/http.config.js";
 import { asyncHandler } from "./middlewares/asyncHandler.middleware.js";
 import { BadRequestException } from "./utils/appError.js";
 import { ErrorCodeEnum } from "./enums/error-code.enum.js";
+import isAuthenticated from "./middlewares/isAuthenticated.middleware.js";
+
 
 import "./config/passport.config.js";
 
 import authRoutes from "./routes/auth.route.js";
+import userRoutes from "./routes/user.route.js";
 
 const app = express();
 const BASE_PATH = config.BASE_PATH;
@@ -62,6 +65,7 @@ app.get(
 
 // Routes
 app.use(`${BASE_PATH}/auth`, authRoutes);
+app.use(`${BASE_PATH}/user`, isAuthenticated, userRoutes);
 
 // Global error handler
 app.use(errorHandler);
