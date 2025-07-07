@@ -18,6 +18,8 @@ import "./config/passport.config.js";
 
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
+import workspaceRoutes from "./routes/workspace.route.js";
+import memberRoutes from "./routes/member.route.js";
 
 const app = express();
 const BASE_PATH = config.BASE_PATH;
@@ -66,6 +68,8 @@ app.get(
 // Routes
 app.use(`${BASE_PATH}/auth`, authRoutes);
 app.use(`${BASE_PATH}/user`, isAuthenticated, userRoutes);
+app.use(`${BASE_PATH}/workspace`, isAuthenticated, workspaceRoutes);
+app.use(`${BASE_PATH}/member`, isAuthenticated, memberRoutes);
 
 // Global error handler
 app.use(errorHandler);
