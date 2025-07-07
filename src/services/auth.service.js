@@ -146,3 +146,25 @@ export const registerUserService = async (body) => {
     throw error;
   }
 };
+
+export const verifyUserService = async ({ email, password, provider }) => {
+  provider = provider || ProviderEnum.EMAIL;
+
+  const account = await AccountModel.findOne({ provider, providerId: email });
+  if (!account) {
+    throw new NotFoundException("Invalid email or password");
+  }
+
+  const user = await UserModel.findById(account.userId);
+
+  if (!user) {
+    throw new NotFoundException("User not found for the given account");
+  }
+
+  const isMatch = await user.comparePassword(password);
+  if (!isMatch) {
+    throw new UnauthorizedException("Invalid email or password");
+  }
+
+  return user.omitPassword();
+};
